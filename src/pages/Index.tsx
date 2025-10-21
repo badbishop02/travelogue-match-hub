@@ -1,12 +1,150 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import Navbar from "@/components/Navbar";
+import TourCard from "@/components/TourCard";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Search, MapPin } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Index = () => {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+  const { session, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
+  const [profile, setProfile] = useState<any>(null);
+  const [tours, setTours] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    if (!authLoading && !session) {
+      navigate("/auth");
+    }
+  }, [session, authLoading, navigate]);
+
+  useEffect(() => {
+    if (session?.user) {
+      fetchProfile();
+      fetchTours();
+    }
+  }, [session]);
+
+  const fetchProfile = async () => {
+    if (!session?.user?.id) return;
+
+    const { data } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("user_id", session.user.id)
+      .single();
+
+    setProfile(data);
+  };
+
+  const fetchTours = async () => {
+    setLoading(true);
+    const { data } = await supabase
+      .from("tours")
+      .select("*")
+      .eq("is_active", true)
+      .order("created_at", { ascending: false });
+
+    setTours(data || []);
+    setLoading(false);
+  };
+
+  const filteredTours = tours.filter((tour) =>
+    tour.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    tour.location_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    tour.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
       </div>
+    );
+  }
+
+  if (!session) return null;
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Navbar session={session} profile={profile} />
+      
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-primary/20 via-background to-secondary/20 py-20">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-5xl font-bold mb-4">Discover Your Next Adventure</h1>
+          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+            Connect with local guides and explore unique experiences around the world
+          </p>
+          
+          {/* Search Bar */}
+          <div className="max-w-2xl mx-auto">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder="Search tours, locations, or experiences..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 pr-4 py-6 text-lg"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Tours Grid */}
+      <section className="container mx-auto px-4 py-12">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-3xl font-bold">Featured Tours</h2>
+          <Button variant="outline" onClick={() => navigate("/discover")}>
+            View All
+          </Button>
+        </div>
+
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <Card key={i} className="overflow-hidden">
+                <Skeleton className="h-48 w-full" />
+                <CardHeader>
+                  <Skeleton className="h-6 w-3/4 mb-2" />
+                  <Skeleton className="h-4 w-full" />
+                </CardHeader>
+                <CardContent>
+                  <Skeleton className="h-4 w-2/3 mb-2" />
+                  <Skeleton className="h-4 w-1/2" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : filteredTours.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredTours.map((tour) => (
+              <TourCard key={tour.id} tour={tour} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <MapPin className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-xl font-semibold mb-2">No tours found</h3>
+            <p className="text-muted-foreground mb-4">
+              {searchQuery ? "Try adjusting your search" : "Be the first to create a tour!"}
+            </p>
+            {!searchQuery && (
+              <Button onClick={() => navigate("/create-tour")}>
+                Create Tour
+              </Button>
+            )}
+          </div>
+        )}
+      </section>
     </div>
   );
 };
