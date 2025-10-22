@@ -45,6 +45,12 @@ const Navbar = ({ session, profile }: NavbarProps) => {
               <Link to="/discover">
                 <Button variant="ghost">Discover</Button>
               </Link>
+              <Link to="/videos">
+                <Button variant="ghost">Videos</Button>
+              </Link>
+              <Link to="/matches">
+                <Button variant="ghost">Matches</Button>
+              </Link>
               <Link to="/create-tour">
                 <Button variant="ghost">
                   <PlusCircle className="mr-2 h-4 w-4" />

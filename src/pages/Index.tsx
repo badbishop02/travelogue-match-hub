@@ -19,15 +19,12 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    if (!authLoading && !session) {
-      navigate("/auth");
-    }
-  }, [session, authLoading, navigate]);
-
-  useEffect(() => {
+    // Always fetch tours, even for non-authenticated users
+    fetchTours();
+    
+    // Fetch profile only if authenticated
     if (session?.user) {
       fetchProfile();
-      fetchTours();
     }
   }, [session]);
 
@@ -61,15 +58,13 @@ const Index = () => {
     tour.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
-      </div>
-    );
-  }
-
-  if (!session) return null;
+  const handleEngagement = (path: string) => {
+    if (!session) {
+      navigate("/auth");
+    } else {
+      navigate(path);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -103,7 +98,7 @@ const Index = () => {
       <section className="container mx-auto px-4 py-12">
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-3xl font-bold">Featured Tours</h2>
-          <Button variant="outline" onClick={() => navigate("/discover")}>
+          <Button variant="outline" onClick={() => handleEngagement("/discover")}>
             View All
           </Button>
         </div>
@@ -138,7 +133,7 @@ const Index = () => {
               {searchQuery ? "Try adjusting your search" : "Be the first to create a tour!"}
             </p>
             {!searchQuery && (
-              <Button onClick={() => navigate("/create-tour")}>
+              <Button onClick={() => handleEngagement("/create-tour")}>
                 Create Tour
               </Button>
             )}

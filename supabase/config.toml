@@ -1,1 +1,13 @@
 project_id = "lnbnhkfodbtuhkrsorwj"
+
+[functions.process-payment]
+verify_jwt = true
+
+[functions.dispatch-driver]
+verify_jwt = true
+
+[functions.generate-embeddings]
+verify_jwt = true
+
+[functions.find-matches]
+verify_jwt = true

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import Navbar from "@/components/Navbar";
+import DriverRequest from "@/components/DriverRequest";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,6 +19,7 @@ const BookTour = () => {
   const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState<any>(null);
   const [tour, setTour] = useState<any>(null);
+  const [bookingId, setBookingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     booking_date: "",
     booking_time: "09:00",
@@ -59,7 +61,7 @@ const BookTour = () => {
     try {
       const totalPrice = tour.price_per_person * formData.num_participants;
 
-      const { error } = await supabase.from("bookings").insert({
+      const { data: booking, error } = await supabase.from("bookings").insert({
         tour_id: tour.id,
         tourist_id: session?.user?.id,
         guide_id: tour.guide_id,
@@ -68,16 +70,16 @@ const BookTour = () => {
         num_participants: formData.num_participants,
         total_price: totalPrice,
         status: "pending",
-      });
+      }).select().single();
 
       if (error) throw error;
+
+      setBookingId(booking.id);
 
       toast({
         title: "Booking submitted!",
         description: "Your booking request has been sent to the guide.",
       });
-
-      navigate("/bookings");
     } catch (error: any) {
       toast({
         title: "Error",
@@ -187,6 +189,20 @@ const BookTour = () => {
             </form>
           </CardContent>
         </Card>
+
+        {bookingId && tour && (
+          <div className="mt-6">
+            <DriverRequest 
+              bookingId={bookingId}
+              tourLocation={{
+                lat: tour.location_lat,
+                lng: tour.location_lng,
+                name: tour.location_name
+              }}
+              onSuccess={() => navigate("/bookings")}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

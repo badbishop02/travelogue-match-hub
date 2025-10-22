@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Clock, Users, DollarSign } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useEffect, useState } from "react";
 
 interface TourCardProps {
   tour: {
@@ -21,12 +23,27 @@ interface TourCardProps {
 
 const TourCard = ({ tour }: TourCardProps) => {
   const navigate = useNavigate();
+  const [session, setSession] = useState<any>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+  }, []);
+
+  const handleClick = () => {
+    if (!session) {
+      navigate("/auth");
+    } else {
+      navigate(`/tours/${tour.id}`);
+    }
+  };
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
       <div 
         className="h-48 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center"
-        onClick={() => navigate(`/tours/${tour.id}`)}
+        onClick={handleClick}
       >
         {tour.images?.[0] ? (
           <img 
@@ -74,7 +91,7 @@ const TourCard = ({ tour }: TourCardProps) => {
           <span>{tour.price_per_person}</span>
           <span className="text-sm text-muted-foreground font-normal">/person</span>
         </div>
-        <Button onClick={() => navigate(`/tours/${tour.id}`)}>
+        <Button onClick={handleClick}>
           View Details
         </Button>
       </CardFooter>

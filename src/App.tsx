@@ -11,6 +11,8 @@ import Profile from "./pages/Profile";
 import CreateTour from "./pages/CreateTour";
 import BookTour from "./pages/BookTour";
 import Bookings from "./pages/Bookings";
+import Videos from "./pages/Videos";
+import Matches from "./pages/Matches";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +32,8 @@ const App = () => (
           <Route path="/create-tour" element={<CreateTour />} />
           <Route path="/book/:id" element={<BookTour />} />
           <Route path="/bookings" element={<Bookings />} />
+          <Route path="/videos" element={<Videos />} />
+          <Route path="/matches" element={<Matches />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

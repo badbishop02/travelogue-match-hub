@@ -64,6 +64,81 @@ export type Database = {
           },
         ]
       }
+      drivers: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_available: boolean | null
+          license_number: string
+          location_lat: number | null
+          location_lng: number | null
+          rating: number | null
+          total_trips: number | null
+          updated_at: string | null
+          user_id: string
+          vehicle_plate: string
+          vehicle_type: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_available?: boolean | null
+          license_number: string
+          location_lat?: number | null
+          location_lng?: number | null
+          rating?: number | null
+          total_trips?: number | null
+          updated_at?: string | null
+          user_id: string
+          vehicle_plate: string
+          vehicle_type: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_available?: boolean | null
+          license_number?: string
+          location_lat?: number | null
+          location_lng?: number | null
+          rating?: number | null
+          total_trips?: number | null
+          updated_at?: string | null
+          user_id?: string
+          vehicle_plate?: string
+          vehicle_type?: string
+        }
+        Relationships: []
+      }
+      matches: {
+        Row: {
+          created_at: string | null
+          id: string
+          match_reason: string | null
+          matched_user_id: string
+          similarity_score: number | null
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          match_reason?: string | null
+          matched_user_id: string
+          similarity_score?: number | null
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          match_reason?: string | null
+          matched_user_id?: string
+          similarity_score?: number | null
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -127,6 +202,78 @@ export type Database = {
         }
         Relationships: []
       }
+      ride_requests: {
+        Row: {
+          actual_fare: number | null
+          booking_id: string
+          created_at: string | null
+          driver_id: string | null
+          dropoff_lat: number
+          dropoff_lng: number
+          dropoff_location_name: string
+          estimated_fare: number | null
+          id: string
+          payment_id: string | null
+          payment_status: string | null
+          pickup_lat: number
+          pickup_lng: number
+          pickup_location_name: string
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          actual_fare?: number | null
+          booking_id: string
+          created_at?: string | null
+          driver_id?: string | null
+          dropoff_lat: number
+          dropoff_lng: number
+          dropoff_location_name: string
+          estimated_fare?: number | null
+          id?: string
+          payment_id?: string | null
+          payment_status?: string | null
+          pickup_lat: number
+          pickup_lng: number
+          pickup_location_name: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          actual_fare?: number | null
+          booking_id?: string
+          created_at?: string | null
+          driver_id?: string | null
+          dropoff_lat?: number
+          dropoff_lng?: number
+          dropoff_location_name?: string
+          estimated_fare?: number | null
+          id?: string
+          payment_id?: string | null
+          payment_status?: string | null
+          pickup_lat?: number
+          pickup_lng?: number
+          pickup_location_name?: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ride_requests_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ride_requests_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tours: {
         Row: {
           created_at: string | null
@@ -187,6 +334,33 @@ export type Database = {
         }
         Relationships: []
       }
+      user_embeddings: {
+        Row: {
+          created_at: string | null
+          embedding_data: string
+          id: string
+          interests_text: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          embedding_data: string
+          id?: string
+          interests_text?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          embedding_data?: string
+          id?: string
+          interests_text?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string | null
@@ -207,6 +381,59 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      videos: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          duration_seconds: number | null
+          id: string
+          likes: number | null
+          thumbnail_url: string | null
+          title: string
+          tour_id: string | null
+          updated_at: string | null
+          user_id: string
+          video_url: string
+          views: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          duration_seconds?: number | null
+          id?: string
+          likes?: number | null
+          thumbnail_url?: string | null
+          title: string
+          tour_id?: string | null
+          updated_at?: string | null
+          user_id: string
+          video_url: string
+          views?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          duration_seconds?: number | null
+          id?: string
+          likes?: number | null
+          thumbnail_url?: string | null
+          title?: string
+          tour_id?: string | null
+          updated_at?: string | null
+          user_id?: string
+          video_url?: string
+          views?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "videos_tour_id_fkey"
+            columns: ["tour_id"]
+            isOneToOne: false
+            referencedRelation: "tours"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
