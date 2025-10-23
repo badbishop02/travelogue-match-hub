@@ -1,10 +1,18 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+const paymentSchema = z.object({
+  amount: z.number().positive().max(1000000),
+  currency: z.string().regex(/^[A-Z]{3}$/).optional(),
+  description: z.string().max(500),
+  rideRequestId: z.string().uuid(),
+});
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -22,9 +30,13 @@ serve(async (req) => {
       }
     );
 
-    const { amount, currency, description, rideRequestId } = await req.json();
+    const body = await req.json();
+    
+    // Validate input
+    const validated = paymentSchema.parse(body);
+    const { amount, currency, description, rideRequestId } = validated;
 
-    console.log('Processing payment:', { amount, currency, description, rideRequestId });
+    console.log('Processing payment for ride:', rideRequestId.slice(0, 8) + '...');
 
     const PESAPAL_CONSUMER_KEY = Deno.env.get('PESAPAL_CONSUMER_KEY');
     const PESAPAL_CONSUMER_SECRET = Deno.env.get('PESAPAL_CONSUMER_SECRET');

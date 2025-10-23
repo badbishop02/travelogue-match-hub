@@ -1,10 +1,17 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+const driverDispatchSchema = z.object({
+  rideRequestId: z.string().uuid(),
+  pickupLat: z.number().min(-90).max(90),
+  pickupLng: z.number().min(-180).max(180),
+});
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -22,9 +29,13 @@ serve(async (req) => {
       }
     );
 
-    const { rideRequestId, pickupLat, pickupLng } = await req.json();
+    const body = await req.json();
+    
+    // Validate input
+    const validated = driverDispatchSchema.parse(body);
+    const { rideRequestId, pickupLat, pickupLng } = validated;
 
-    console.log('Dispatching driver for ride:', rideRequestId);
+    console.log('Dispatching driver for ride:', rideRequestId.slice(0, 8) + '...');
 
     // Find nearby available drivers using simple distance calculation
     const { data: drivers, error: driversError } = await supabaseClient
@@ -74,7 +85,7 @@ serve(async (req) => {
       );
     }
 
-    console.log('Nearest driver found:', nearestDriver.id);
+    console.log('Nearest driver assigned');
 
     // Assign driver to ride request
     const { data: updatedRide, error: updateError } = await supabaseClient
