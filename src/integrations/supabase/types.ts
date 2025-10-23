@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      activity_logs: {
+        Row: {
+          action: string
+          created_at: string | null
+          details: Json | null
+          id: string
+          ip_address: string | null
+          resource_id: string | null
+          resource_type: string
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          ip_address?: string | null
+          resource_id?: string | null
+          resource_type: string
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          ip_address?: string | null
+          resource_id?: string | null
+          resource_type?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       bookings: {
         Row: {
           booking_date: string
@@ -64,6 +97,56 @@ export type Database = {
           },
         ]
       }
+      commissions: {
+        Row: {
+          booking_amount: number
+          booking_id: string
+          commission_amount: number
+          commission_rate: number
+          created_at: string | null
+          guide_id: string
+          id: string
+          platform_earnings: number
+          status: string
+          tourist_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          booking_amount: number
+          booking_id: string
+          commission_amount: number
+          commission_rate?: number
+          created_at?: string | null
+          guide_id: string
+          id?: string
+          platform_earnings: number
+          status?: string
+          tourist_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          booking_amount?: number
+          booking_id?: string
+          commission_amount?: number
+          commission_rate?: number
+          created_at?: string | null
+          guide_id?: string
+          id?: string
+          platform_earnings?: number
+          status?: string
+          tourist_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commissions_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       drivers: {
         Row: {
           created_at: string | null
@@ -109,6 +192,48 @@ export type Database = {
         }
         Relationships: []
       }
+      identity_verifications: {
+        Row: {
+          created_at: string | null
+          document_url: string
+          id: string
+          rejection_reason: string | null
+          status: string
+          submitted_at: string | null
+          updated_at: string | null
+          user_id: string
+          verification_type: string
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          document_url: string
+          id?: string
+          rejection_reason?: string | null
+          status?: string
+          submitted_at?: string | null
+          updated_at?: string | null
+          user_id: string
+          verification_type: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          document_url?: string
+          id?: string
+          rejection_reason?: string | null
+          status?: string
+          submitted_at?: string | null
+          updated_at?: string | null
+          user_id?: string
+          verification_type?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: []
+      }
       matches: {
         Row: {
           created_at: string | null
@@ -136,6 +261,42 @@ export type Database = {
           similarity_score?: number | null
           status?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      payouts: {
+        Row: {
+          amount: number
+          created_at: string | null
+          guide_id: string
+          id: string
+          payment_details: Json | null
+          payment_method: string
+          processed_at: string | null
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          guide_id: string
+          id?: string
+          payment_details?: Json | null
+          payment_method?: string
+          processed_at?: string | null
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          guide_id?: string
+          id?: string
+          payment_details?: Json | null
+          payment_method?: string
+          processed_at?: string | null
+          status?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
