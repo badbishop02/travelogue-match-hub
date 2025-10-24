@@ -34,13 +34,14 @@ const Videos = () => {
   const [uploadUrl, setUploadUrl] = useState("");
 
   useEffect(() => {
-    if (!session) {
-      navigate("/auth");
-      return;
-    }
-    fetchProfile();
+    // Always fetch videos for everyone
     fetchVideos();
-  }, [session, navigate]);
+    
+    // Fetch profile only if authenticated
+    if (session?.user) {
+      fetchProfile();
+    }
+  }, [session]);
 
   const fetchProfile = async () => {
     if (!session?.user?.id) return;
@@ -64,6 +65,10 @@ const Videos = () => {
   };
 
   const handleLike = async (videoId: string) => {
+    if (!session) {
+      navigate("/auth");
+      return;
+    }
     const video = videos.find(v => v.id === videoId);
     if (!video) return;
 
@@ -139,50 +144,50 @@ const Videos = () => {
     }
   };
 
-  if (!session) return null;
-
   return (
     <div className="min-h-screen bg-background">
       <Navbar session={session} profile={profile} />
       
       <div className="relative h-[calc(100vh-64px)] overflow-hidden">
-        {/* Upload Button */}
-        <Dialog open={uploadOpen} onOpenChange={setUploadOpen}>
-          <DialogTrigger asChild>
-            <Button 
-              className="fixed top-20 right-4 z-50 rounded-full"
-              size="lg"
-            >
-              <Upload className="mr-2 h-5 w-5" />
-              Upload Video
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Upload a Video</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-              <Input
-                placeholder="Video title"
-                value={uploadTitle}
-                onChange={(e) => setUploadTitle(e.target.value)}
-              />
-              <Textarea
-                placeholder="Description"
-                value={uploadDescription}
-                onChange={(e) => setUploadDescription(e.target.value)}
-              />
-              <Input
-                placeholder="Video URL (YouTube, Vimeo, etc.)"
-                value={uploadUrl}
-                onChange={(e) => setUploadUrl(e.target.value)}
-              />
-              <Button onClick={handleUpload} className="w-full">
-                Publish Video
+        {/* Upload Button - Only show for authenticated users */}
+        {session && (
+          <Dialog open={uploadOpen} onOpenChange={setUploadOpen}>
+            <DialogTrigger asChild>
+              <Button 
+                className="fixed top-20 right-4 z-50 rounded-full"
+                size="lg"
+              >
+                <Upload className="mr-2 h-5 w-5" />
+                Upload Video
               </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Upload a Video</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 py-4">
+                <Input
+                  placeholder="Video title"
+                  value={uploadTitle}
+                  onChange={(e) => setUploadTitle(e.target.value)}
+                />
+                <Textarea
+                  placeholder="Description"
+                  value={uploadDescription}
+                  onChange={(e) => setUploadDescription(e.target.value)}
+                />
+                <Input
+                  placeholder="Video URL (YouTube, Vimeo, etc.)"
+                  value={uploadUrl}
+                  onChange={(e) => setUploadUrl(e.target.value)}
+                />
+                <Button onClick={handleUpload} className="w-full">
+                  Publish Video
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        )}
 
         {/* Video Feed */}
         <div 

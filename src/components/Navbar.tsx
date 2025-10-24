@@ -40,14 +40,14 @@ const Navbar = ({ session, profile }: NavbarProps) => {
         </Link>
 
         <div className="flex items-center gap-4">
+          <Link to="/discover">
+            <Button variant="ghost">Discover</Button>
+          </Link>
+          <Link to="/videos">
+            <Button variant="ghost">Videos</Button>
+          </Link>
           {session ? (
             <>
-              <Link to="/discover">
-                <Button variant="ghost">Discover</Button>
-              </Link>
-              <Link to="/videos">
-                <Button variant="ghost">Videos</Button>
-              </Link>
               <Link to="/matches">
                 <Button variant="ghost">Matches</Button>
               </Link>

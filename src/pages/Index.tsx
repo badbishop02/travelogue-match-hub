@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Search, MapPin } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import heroImage from "@/assets/hero-tourism.jpg";
+import { SeedDataButton } from "@/components/SeedDataButton";
 
 const Index = () => {
   const { session, loading: authLoading } = useAuth();
@@ -71,10 +73,20 @@ const Index = () => {
       <Navbar session={session} profile={profile} />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary/20 via-background to-secondary/20 py-20">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-5xl font-bold mb-4">Discover Your Next Adventure</h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+      <section className="relative py-32 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src={heroImage} 
+            alt="Tourism adventure" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/70 via-primary/50 to-secondary/60" />
+        </div>
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <h1 className="text-5xl md:text-6xl font-bold mb-4 text-white drop-shadow-lg">
+            Discover Your Next Adventure
+          </h1>
+          <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto text-white drop-shadow-md">
             Connect with local guides and explore unique experiences around the world
           </p>
           
@@ -98,9 +110,12 @@ const Index = () => {
       <section className="container mx-auto px-4 py-12">
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-3xl font-bold">Featured Tours</h2>
-          <Button variant="outline" onClick={() => handleEngagement("/discover")}>
-            View All
-          </Button>
+          <div className="flex gap-2">
+            {session && <SeedDataButton />}
+            <Button variant="outline" onClick={() => handleEngagement("/discover")}>
+              View All
+            </Button>
+          </div>
         </div>
 
         {loading ? (
