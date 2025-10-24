@@ -8,8 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Calendar, Users, DollarSign } from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 const BookTour = () => {
   const { id } = useParams();
@@ -20,6 +24,7 @@ const BookTour = () => {
   const [profile, setProfile] = useState<any>(null);
   const [tour, setTour] = useState<any>(null);
   const [bookingId, setBookingId] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date>();
   const [formData, setFormData] = useState({
     booking_date: "",
     booking_time: "09:00",
@@ -114,18 +119,39 @@ const BookTour = () => {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="booking_date">
+                <Label>
                   <Calendar className="inline mr-2 h-4 w-4" />
                   Date *
                 </Label>
-                <Input
-                  id="booking_date"
-                  type="date"
-                  value={formData.booking_date}
-                  onChange={(e) => setFormData({ ...formData, booking_date: e.target.value })}
-                  min={new Date().toISOString().split("T")[0]}
-                  required
-                />
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !selectedDate && "text-muted-foreground"
+                      )}
+                    >
+                      <Calendar className="mr-2 h-4 w-4" />
+                      {selectedDate ? format(selectedDate, "PPP") : "Pick a date"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <CalendarComponent
+                      mode="single"
+                      selected={selectedDate}
+                      onSelect={(date) => {
+                        setSelectedDate(date);
+                        if (date) {
+                          setFormData({ ...formData, booking_date: format(date, "yyyy-MM-dd") });
+                        }
+                      }}
+                      disabled={(date) => date < new Date()}
+                      initialFocus
+                      className="pointer-events-auto"
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
 
               <div className="space-y-2">

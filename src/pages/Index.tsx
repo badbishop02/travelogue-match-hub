@@ -72,42 +72,22 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navbar session={session} profile={profile} />
       
-      {/* Hero Section */}
-      <section className="relative py-32 overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <img 
-            src={heroImage} 
-            alt="Tourism adventure" 
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/70 via-primary/50 to-secondary/60" />
-        </div>
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4 text-white drop-shadow-lg">
-            Discover Your Next Adventure
-          </h1>
-          <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto text-white drop-shadow-md">
-            Connect with local guides and explore unique experiences around the world
-          </p>
-          
-          {/* Search Bar */}
-          <div className="max-w-2xl mx-auto">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <Input
-                type="text"
-                placeholder="Search tours, locations, or experiences..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-6 text-lg"
-              />
-            </div>
+      {/* Tours Grid Section - Direct Display */}
+      <section className="container mx-auto px-4 py-8">
+        {/* Search and Filters */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-6">Discover Adventures</h1>
+          <div className="relative max-w-2xl">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Search tours, locations, or experiences..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
           </div>
         </div>
-      </section>
-
-      {/* Tours Grid */}
-      <section className="container mx-auto px-4 py-12">
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-3xl font-bold">Featured Tours</h2>
           <div className="flex gap-2">
