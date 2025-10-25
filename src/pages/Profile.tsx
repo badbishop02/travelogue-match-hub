@@ -115,17 +115,17 @@ const Profile = () => {
     <div className="min-h-screen bg-background">
       <Navbar session={session} profile={profile} />
 
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <div className="flex items-center gap-6 mb-8">
-          <Avatar className="h-24 w-24">
+      <div className="container mx-auto mobile-padding py-8 max-w-4xl">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-8">
+          <Avatar className="h-20 w-20 sm:h-24 sm:w-24">
             <AvatarImage src={profile?.avatar_url} alt={profile?.full_name} />
-            <AvatarFallback className="text-3xl">
+            <AvatarFallback className="text-2xl sm:text-3xl">
               {profile?.full_name?.[0]?.toUpperCase() || "U"}
             </AvatarFallback>
           </Avatar>
           <div>
-            <h1 className="text-3xl font-bold mb-2">{profile?.full_name || "Your Profile"}</h1>
-            <div className="flex gap-2">
+            <h1 className="mobile-heading font-bold mb-2">{profile?.full_name || "Your Profile"}</h1>
+            <div className="flex gap-2 flex-wrap">
               {roles.map((role) => (
                 <Badge key={role} variant="secondary">
                   {role}

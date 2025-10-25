@@ -92,9 +92,9 @@ const TourDetail = () => {
     <div className="min-h-screen bg-background">
       <Navbar session={session} profile={profile} />
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto mobile-padding py-8">
         {/* Tour Image */}
-        <div className="h-96 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg mb-8 flex items-center justify-center overflow-hidden">
+        <div className="h-64 sm:h-96 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg mb-8 flex items-center justify-center overflow-hidden">
           {tour.images?.[0] ? (
             <img src={tour.images[0]} alt={tour.title} className="w-full h-full object-cover" />
           ) : (
@@ -106,15 +106,15 @@ const TourDetail = () => {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             <div>
-              <div className="flex items-start justify-between mb-4">
-                <h1 className="text-4xl font-bold">{tour.title}</h1>
-                <Badge variant="secondary" className="text-lg">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+                <h1 className="mobile-heading font-bold">{tour.title}</h1>
+                <Badge variant="secondary" className="text-base sm:text-lg">
                   {tour.difficulty_level}
                 </Badge>
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <MapPin className="h-5 w-5" />
-                <span className="text-lg">{tour.location_name}</span>
+                <span className="text-base sm:text-lg">{tour.location_name}</span>
               </div>
             </div>
 
@@ -123,7 +123,7 @@ const TourDetail = () => {
                 <CardTitle>About This Tour</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground whitespace-pre-line">{tour.description}</p>
+                <p className="text-muted-foreground whitespace-pre-line mobile-text">{tour.description}</p>
               </CardContent>
             </Card>
 
@@ -179,12 +179,12 @@ const TourDetail = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center gap-4">
-                    <Avatar className="h-16 w-16">
+                    <Avatar className="h-12 w-12 sm:h-16 sm:w-16">
                       <AvatarImage src={guide.avatar_url} alt={guide.full_name} />
                       <AvatarFallback>{guide.full_name?.[0]?.toUpperCase()}</AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-semibold text-lg">{guide.full_name}</p>
+                      <p className="font-semibold text-base sm:text-lg">{guide.full_name}</p>
                       {guide.bio && (
                         <p className="text-sm text-muted-foreground line-clamp-2">{guide.bio}</p>
                       )}
@@ -199,10 +199,10 @@ const TourDetail = () => {
           <div className="lg:col-span-1">
             <Card className="sticky top-4">
               <CardHeader>
-                <div className="flex items-center gap-2 text-3xl font-bold">
-                  <DollarSign className="h-8 w-8" />
+                <div className="flex items-center gap-2 text-2xl sm:text-3xl font-bold">
+                  <DollarSign className="h-6 w-6 sm:h-8 sm:w-8" />
                   <span>{tour.price_per_person}</span>
-                  <span className="text-base text-muted-foreground font-normal">/person</span>
+                  <span className="text-sm sm:text-base text-muted-foreground font-normal">/person</span>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">

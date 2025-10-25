@@ -80,8 +80,8 @@ const Discover = () => {
     <div className="min-h-screen bg-background">
       <Navbar session={session} profile={profile} />
 
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold mb-8">Discover Tours</h1>
+      <div className="container mx-auto mobile-padding py-8 max-w-4xl">
+        <h1 className="mobile-heading font-bold mb-8">Discover Tours</h1>
 
         {/* Filters */}
         <div className="bg-card p-4 rounded-lg shadow-sm mb-8 space-y-4">
@@ -98,7 +98,7 @@ const Discover = () => {
 
           <div className="flex flex-wrap gap-4">
             <Select value={difficultyFilter} onValueChange={setDifficultyFilter}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full sm:w-[180px]">
                 <SlidersHorizontal className="mr-2 h-4 w-4" />
                 <SelectValue placeholder="Difficulty" />
               </SelectTrigger>
@@ -111,7 +111,7 @@ const Discover = () => {
             </Select>
 
             <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
               <SelectContent>
@@ -129,7 +129,7 @@ const Discover = () => {
             <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto" />
           </div>
         ) : filteredTours.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredTours.map((tour) => (
               <TourCard key={tour.id} tour={tour} />
             ))}

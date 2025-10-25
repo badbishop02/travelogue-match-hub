@@ -133,10 +133,10 @@ const CreateTour = () => {
     <div className="min-h-screen bg-background">
       <Navbar session={session} profile={profile} />
 
-      <div className="container mx-auto px-4 py-8 max-w-3xl">
+      <div className="container mx-auto mobile-padding py-8 max-w-3xl">
         <Card>
           <CardHeader>
-            <CardTitle className="text-3xl">Create a New Tour</CardTitle>
+            <CardTitle className="mobile-heading">Create a New Tour</CardTitle>
             <CardDescription>Share your local expertise with travelers</CardDescription>
           </CardHeader>
           <CardContent>
@@ -189,7 +189,7 @@ const CreateTour = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="max_participants">Max Participants *</Label>
                   <Input

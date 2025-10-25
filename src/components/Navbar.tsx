@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Compass, User, LogOut, PlusCircle } from "lucide-react";
 import { Session } from "@supabase/supabase-js";
+import ThemeToggle from "@/components/ThemeToggle";
 
 interface NavbarProps {
   session: Session | null;
@@ -40,6 +41,7 @@ const Navbar = ({ session, profile }: NavbarProps) => {
         </Link>
 
         <div className="flex items-center gap-2 sm:gap-4">
+          <ThemeToggle />
           <Link to="/discover">
             <Button variant="ghost" size="sm" className="hidden sm:inline-flex">Discover</Button>
           </Link>
