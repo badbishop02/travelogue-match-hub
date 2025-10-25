@@ -73,10 +73,10 @@ const Onboarding = () => {
       // Create role
       const { error: roleError } = await supabase
         .from("user_roles")
-        .insert({
+        .insert([{
           user_id: session?.user?.id,
-          role: formData.role,
-        });
+          role: formData.role as "tourist" | "guide" | "admin",
+        }]);
 
       if (roleError) throw roleError;
 

@@ -103,4 +103,26 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Mobile-responsive adjustments */
+  @media (max-width: 768px) {
+    .container {
+      @apply px-3;
+    }
+  }
+}
+
+/* Mobile-first responsive utilities */
+@layer utilities {
+  .mobile-padding {
+    @apply px-4 md:px-6 lg:px-8;
+  }
+  
+  .mobile-text {
+    @apply text-sm md:text-base;
+  }
+  
+  .mobile-heading {
+    @apply text-2xl md:text-3xl lg:text-4xl;
+  }
 }

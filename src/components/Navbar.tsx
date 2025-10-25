@@ -35,24 +35,24 @@ const Navbar = ({ session, profile }: NavbarProps) => {
     <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <Compass className="h-6 w-6 text-primary" />
-          <span className="font-bold text-xl">Tourly</span>
+          <Compass className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+          <span className="font-bold text-lg sm:text-xl">Tourly</span>
         </Link>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <Link to="/discover">
-            <Button variant="ghost">Discover</Button>
+            <Button variant="ghost" size="sm" className="hidden sm:inline-flex">Discover</Button>
           </Link>
           <Link to="/videos">
-            <Button variant="ghost">Videos</Button>
+            <Button variant="ghost" size="sm" className="hidden sm:inline-flex">Videos</Button>
           </Link>
           {session ? (
             <>
-              <Link to="/matches">
-                <Button variant="ghost">Matches</Button>
+              <Link to="/matches" className="hidden sm:block">
+                <Button variant="ghost" size="sm">Matches</Button>
               </Link>
-              <Link to="/create-tour">
-                <Button variant="ghost">
+              <Link to="/create-tour" className="hidden md:block">
+                <Button variant="ghost" size="sm">
                   <PlusCircle className="mr-2 h-4 w-4" />
                   Create Tour
                 </Button>

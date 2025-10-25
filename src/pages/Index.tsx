@@ -88,11 +88,11 @@ const Index = () => {
             />
           </div>
         </div>
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl font-bold">Featured Tours</h2>
-          <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold">Featured Tours</h2>
+          <div className="flex gap-2 flex-wrap">
             {session && <SeedDataButton />}
-            <Button variant="outline" onClick={() => handleEngagement("/discover")}>
+            <Button variant="outline" onClick={() => handleEngagement("/discover")} size="sm">
               View All
             </Button>
           </div>
