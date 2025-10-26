@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,11 @@ const Auth = () => {
   const [selectedRole, setSelectedRole] = useState<"tourist" | "guide">("tourist");
   const navigate = useNavigate();
   const { toast } = useToast();
+  
+  // Get redirect parameter from URL
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const redirectTo = searchParams.get('redirect') || '/';
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,7 +54,8 @@ const Auth = () => {
           description: "Welcome to Tourly. Setting up your profile...",
         });
 
-        navigate("/");
+        // Redirect to onboarding for new users
+        navigate("/onboarding");
       }
     } catch (error: any) {
       toast({
@@ -67,19 +73,31 @@ const Auth = () => {
     setIsLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) throw error;
 
+      // Check if user needs onboarding
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("onboarded")
+        .eq("user_id", data.user.id)
+        .single();
+
       toast({
         title: "Welcome back!",
         description: "Successfully signed in.",
       });
 
-      navigate("/");
+      // Redirect to onboarding if not completed, otherwise to intended destination
+      if (profileData && !profileData.onboarded) {
+        navigate("/onboarding");
+      } else {
+        navigate(redirectTo);
+      }
     } catch (error: any) {
       toast({
         title: "Error",

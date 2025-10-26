@@ -313,13 +313,17 @@ export type Database = {
           full_name: string
           hobbies: string[] | null
           id: string
+          intro_video_url: string | null
           languages: string[] | null
           location_lat: number | null
           location_lng: number | null
           location_name: string | null
           music_tastes: string[] | null
+          onboarded: boolean | null
+          talents: string[] | null
           updated_at: string | null
           user_id: string
+          verified: boolean | null
         }
         Insert: {
           avatar_url?: string | null
@@ -333,13 +337,17 @@ export type Database = {
           full_name: string
           hobbies?: string[] | null
           id?: string
+          intro_video_url?: string | null
           languages?: string[] | null
           location_lat?: number | null
           location_lng?: number | null
           location_name?: string | null
           music_tastes?: string[] | null
+          onboarded?: boolean | null
+          talents?: string[] | null
           updated_at?: string | null
           user_id: string
+          verified?: boolean | null
         }
         Update: {
           avatar_url?: string | null
@@ -353,13 +361,17 @@ export type Database = {
           full_name?: string
           hobbies?: string[] | null
           id?: string
+          intro_video_url?: string | null
           languages?: string[] | null
           location_lat?: number | null
           location_lng?: number | null
           location_name?: string | null
           music_tastes?: string[] | null
+          onboarded?: boolean | null
+          talents?: string[] | null
           updated_at?: string | null
           user_id?: string
+          verified?: boolean | null
         }
         Relationships: []
       }
