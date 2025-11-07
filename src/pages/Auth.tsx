@@ -49,13 +49,13 @@ const Auth = () => {
 
         if (roleError) throw roleError;
 
-        toast({
-          title: "Account created!",
-          description: "Welcome to Tourly. Setting up your profile...",
-        });
+      toast({
+        title: "Account created!",
+        description: "Welcome to Tourly. Setting up your profile...",
+      });
 
-        // Redirect to onboarding for new users
-        navigate("/onboarding");
+      // Redirect to onboarding for new users
+      setTimeout(() => navigate("/onboarding"), 100);
       }
     } catch (error: any) {
       toast({
@@ -93,11 +93,13 @@ const Auth = () => {
       });
 
       // Redirect to onboarding if not completed, otherwise to intended destination
-      if (profileData && !profileData.onboarded) {
-        navigate("/onboarding");
-      } else {
-        navigate(redirectTo);
-      }
+      setTimeout(() => {
+        if (profileData && !profileData.onboarded) {
+          navigate("/onboarding");
+        } else {
+          navigate(redirectTo);
+        }
+      }, 100);
     } catch (error: any) {
       toast({
         title: "Error",
