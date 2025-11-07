@@ -12,6 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 
+const DRAFT_KEY = "tourly_draft_create_tour";
+
 const CreateTour = () => {
   const { session } = useAuth();
   const navigate = useNavigate();
@@ -19,17 +21,46 @@ const CreateTour = () => {
   const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState<any>(null);
   const [isGuide, setIsGuide] = useState(false);
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    location_name: "",
-    duration_hours: 2,
-    max_participants: 10,
-    price_per_person: 50,
-    difficulty_level: "moderate",
-    languages: "",
-    included_items: "",
+  
+  // Initialize form data from localStorage draft if available
+  const [formData, setFormData] = useState(() => {
+    const savedDraft = localStorage.getItem(DRAFT_KEY);
+    if (savedDraft) {
+      try {
+        return JSON.parse(savedDraft);
+      } catch {
+        return {
+          title: "",
+          description: "",
+          location_name: "",
+          duration_hours: 2,
+          max_participants: 10,
+          price_per_person: 50,
+          difficulty_level: "moderate",
+          languages: "",
+          included_items: "",
+        };
+      }
+    }
+    return {
+      title: "",
+      description: "",
+      location_name: "",
+      duration_hours: 2,
+      max_participants: 10,
+      price_per_person: 50,
+      difficulty_level: "moderate",
+      languages: "",
+      included_items: "",
+    };
   });
+
+  // Save draft to localStorage whenever form data changes
+  useEffect(() => {
+    if (session && isGuide) {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(formData));
+    }
+  }, [formData, session, isGuide]);
 
   useEffect(() => {
     if (!session) {
@@ -38,6 +69,15 @@ const CreateTour = () => {
     }
     fetchProfile();
     checkIfGuide();
+    
+    // Show notification if draft was restored
+    const savedDraft = localStorage.getItem(DRAFT_KEY);
+    if (savedDraft) {
+      toast({
+        title: "Draft restored",
+        description: "Your previous tour draft has been restored.",
+      });
+    }
   }, [session]);
 
   const fetchProfile = async () => {
@@ -95,6 +135,9 @@ const CreateTour = () => {
 
       if (error) throw error;
 
+      // Clear the draft after successful submission
+      localStorage.removeItem(DRAFT_KEY);
+      
       toast({
         title: "Tour created!",
         description: "Your tour has been successfully created.",

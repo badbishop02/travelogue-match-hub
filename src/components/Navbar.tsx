@@ -25,6 +25,17 @@ const Navbar = ({ session, profile }: NavbarProps) => {
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
+    
+    // Clear all session-related data
+    localStorage.removeItem("tourly_last_activity");
+    
+    // Clear any draft data
+    Object.keys(localStorage).forEach(key => {
+      if (key.startsWith("tourly_draft_")) {
+        localStorage.removeItem(key);
+      }
+    });
+    
     toast({
       title: "Signed out",
       description: "You've been successfully signed out.",
